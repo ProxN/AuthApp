@@ -1,4 +1,4 @@
-# imup
+# AuthApp
 
 devchallenges.io full stack Challenge - Authentication App
 
