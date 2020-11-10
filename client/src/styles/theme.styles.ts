@@ -43,10 +43,15 @@ const colors = {
   },
   bg: '#fff',
   bgInverse: '#272c36',
+  border: {
+    gray1: '#BDBDBD',
+    gray2: '#E0E0E0',
+    gray3: '#828282',
+  },
 };
 
 const lineHeight = 1.5;
-const fontFamily = "'Nato Sans', Helvetica, sans-serif";
+const fontFamily = "'Noto Sans', Helvetica, sans-serif";
 const fontWeights = [400, 600, 700];
 
 const Theme: DefaultTheme = {
@@ -55,7 +60,7 @@ const Theme: DefaultTheme = {
   fontFamily,
   fontSizes,
   fontWeights,
-  fontSizeBase: fontSizes[2],
+  fontSizeBase: fontSizes[1],
   borderRadius: '12px',
 };
 

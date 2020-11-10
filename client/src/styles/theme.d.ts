@@ -24,6 +24,11 @@ declare module 'styled-components' {
       warining: IColor;
       text: ITextColor;
       textInverse: ITextColor;
+      border: {
+        gray1: string;
+        gray2: string;
+        gray3: string;
+      };
       bg: string;
       bgInverse: string;
     };
