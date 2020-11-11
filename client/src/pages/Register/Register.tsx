@@ -16,11 +16,11 @@ const Form = styled.form`
   }
 `;
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   return (
     <Flex height='100%' justify='center' align='center'>
       <Flex direction='column'>
-        <Authbox title='Login' width='450px'>
+        <Authbox page='register' title='Login' width='450px'>
           <Form>
             <Input placeholder='Email' icon={<MailSvg />} fullWidth />
             <Input
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
               icon={<LockSvg />}
               fullWidth
             />
-            <Button fullWidth>Login</Button>
+            <Button fullWidth>Start coding now</Button>
           </Form>
         </Authbox>
         <CopyRight />
@@ -38,4 +38,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

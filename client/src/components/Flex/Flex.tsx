@@ -10,14 +10,18 @@ interface FlexProps {
     | 'space-around'
     | 'flex-start'
     | 'flex-end';
+  direction?: 'column' | 'row' | 'column-reverse' | 'row-reverse';
   height?: string;
+  fullWidth?: boolean;
 }
 
 const FlexContainer = styled.div<FlexProps>`
-  ${({ justify, align, height }) => css`
+  ${({ justify, align, height, direction, fullWidth }) => css`
     align-items: ${align};
     justify-content: ${justify};
     height: ${height && height};
+    flex-direction: ${direction};
+    width: ${fullWidth && '100%'};
   `};
   display: flex;
 `;
@@ -29,6 +33,8 @@ const Flex: React.FC<FlexProps> = (props) => {
 Flex.defaultProps = {
   align: 'flex-start',
   justify: 'flex-start',
+  direction: 'row',
+  fullWidth: false,
 };
 
 export default Flex;

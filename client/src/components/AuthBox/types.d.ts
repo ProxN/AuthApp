@@ -4,4 +4,5 @@ export interface StylesProps {
 
 export interface AuthBoxProps extends StylesProps {
   title?: string;
+  page?: 'login' | 'register';
 }

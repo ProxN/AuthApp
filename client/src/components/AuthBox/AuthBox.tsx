@@ -14,8 +14,21 @@ import {
   CircleSVG,
 } from './AuthBox.styles';
 
+const info = {
+  login: {
+    text: 'Don’t have an account yet?',
+    href: '/register',
+    linkText: 'Register',
+  },
+  register: {
+    text: 'Adready a member?',
+    href: '/login',
+    linkText: 'Login',
+  },
+};
+
 const AuthBox: React.FC<AuthBoxProps> = (props) => {
-  const { title, children, ...rest } = props;
+  const { title, children, page, ...rest } = props;
   return (
     <AuthContainer {...rest}>
       <Logo />
@@ -34,13 +47,23 @@ const AuthBox: React.FC<AuthBoxProps> = (props) => {
             <GithubSVG />
           </CircleSVG>
         </AuthSocial>
-        <Text appearance='hint'>
-          Don’t have an account yet?
-          <Link href='/register'>Register</Link>
-        </Text>
+
+        {page && (
+          <Text appearance='hint'>
+            {info[page].text}
+            <Link href={info[page].href}>
+              &nbsp;
+              {info[page].linkText}
+            </Link>
+          </Text>
+        )}
       </AuthInfo>
     </AuthContainer>
   );
+};
+
+AuthBox.defaultProps = {
+  page: 'login',
 };
 
 export default AuthBox;

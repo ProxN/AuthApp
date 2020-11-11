@@ -8,6 +8,7 @@ export const AuthContainer = styled.div<StylesProps>`
     width: ${width && width};
   `};
   padding: 4rem;
+  margin-bottom: 0.8rem;
 `;
 
 export const AuthTitle = styled.h1`
