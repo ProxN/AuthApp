@@ -21,6 +21,13 @@ const PrimaryStyles = css`
   `};
 `;
 
+const DefaultStyles = css`
+  ${({ theme }) => css`
+    border-color: ${theme.colors.border.gray3};
+    color: ${theme.colors.textInverse.secondary};
+  `};
+`;
+
 const BaseStyles = css<StylesProps>`
   ${({ fullWidth, Size, borderRadius }) => css`
     padding: ${Size && ButtonSizes[Size]};
@@ -39,7 +46,7 @@ const BaseStyles = css<StylesProps>`
   line-height: 1.5;
 `;
 
-export default styled.button`
+export default styled.button<StylesProps>`
   ${BaseStyles};
-  ${PrimaryStyles};
+  ${({ status }) => (status === 'primary' ? PrimaryStyles : DefaultStyles)}
 `;

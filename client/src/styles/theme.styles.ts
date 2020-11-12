@@ -39,7 +39,7 @@ const colors = {
   },
   textInverse: {
     main: '#fff',
-    secondary: '#BDBDBD',
+    secondary: '#828282',
   },
   bg: '#fff',
   bgInverse: '#272c36',

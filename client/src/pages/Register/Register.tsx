@@ -29,7 +29,9 @@ const Register: React.FC = () => {
               icon={<LockSvg />}
               fullWidth
             />
-            <Button fullWidth>Start coding now</Button>
+            <Button status='primary' fullWidth>
+              Start coding now
+            </Button>
           </Form>
         </Authbox>
         <CopyRight />

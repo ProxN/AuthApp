@@ -11,13 +11,24 @@ export const InputContainer = styled.div`
   margin-bottom: 1.4rem;
 `;
 
+export const Label = styled.label`
+  ${({ theme }) => css`
+    font-size: ${theme.fontSizes[0]}px;
+  `};
+  line-height: 1.5;
+  color: #4f4f4f;
+  text-transform: capitalize;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+`;
+
 export const InputBox = styled.div`
   display: flex;
   align-items: center;
   position: relative;
 `;
 
-export const StyledInput = styled.input<InputStylesProps>`
+const InputBaseStyles = css<InputStylesProps>`
   ${({ theme, Size, borderRadius, withIcon, fullWidth }) => css`
     line-height: ${theme.lineHeight};
     padding: ${InputSizes[Size as keyof typeof InputSizes]};
@@ -43,6 +54,9 @@ export const StyledInput = styled.input<InputStylesProps>`
   overflow: hidden;
   outline: none;
 `;
+export const StyledInput = styled.input`
+  ${InputBaseStyles};
+`;
 
 export const SvgIcon = styled.span`
   height: 2rem;
@@ -50,4 +64,9 @@ export const SvgIcon = styled.span`
   position: absolute;
   left: 1.2rem;
   color: #828282;
+`;
+
+export const TextArea = styled.textarea`
+  ${InputBaseStyles};
+  resize: none;
 `;

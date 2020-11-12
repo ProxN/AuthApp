@@ -11,6 +11,7 @@ Button.defaultProps = {
   fullWidth: false,
   type: 'button',
   borderRadius: '8px',
+  status: 'default',
 };
 
 export default Button;

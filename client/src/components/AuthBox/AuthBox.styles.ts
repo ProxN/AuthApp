@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import { Media } from '../../styles';
 import { StylesProps } from './types';
 
 export const AuthContainer = styled.div<StylesProps>`
@@ -9,6 +10,11 @@ export const AuthContainer = styled.div<StylesProps>`
   `};
   padding: 4rem;
   margin-bottom: 0.8rem;
+
+  ${Media.thone} {
+    width: 100%;
+    border: none;
+  }
 `;
 
 export const AuthTitle = styled.h1`

@@ -20,4 +20,5 @@ export interface InputStylesProps extends BaseProps {
 
 export interface InputProps extends BaseProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
 }

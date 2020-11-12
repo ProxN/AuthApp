@@ -29,7 +29,9 @@ const Login: React.FC = () => {
               icon={<LockSvg />}
               fullWidth
             />
-            <Button fullWidth>Login</Button>
+            <Button status='primary' fullWidth>
+              Login
+            </Button>
           </Form>
         </Authbox>
         <CopyRight />

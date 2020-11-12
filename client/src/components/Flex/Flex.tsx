@@ -13,15 +13,17 @@ interface FlexProps {
   direction?: 'column' | 'row' | 'column-reverse' | 'row-reverse';
   height?: string;
   fullWidth?: boolean;
+  margin?: string;
 }
 
 const FlexContainer = styled.div<FlexProps>`
-  ${({ justify, align, height, direction, fullWidth }) => css`
+  ${({ justify, align, height, direction, fullWidth, margin }) => css`
     align-items: ${align};
     justify-content: ${justify};
     height: ${height && height};
     flex-direction: ${direction};
     width: ${fullWidth && '100%'};
+    margin: ${margin && margin};
   `};
   display: flex;
 `;
