@@ -10,7 +10,6 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import authResolver from './resolvers/auth.resolver';
 import userResolver from './resolvers/user.resolver';
-import { HelloReslover } from './resolvers/hello';
 import User from './entities/User';
 import authChecker from './utils/authChecker';
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER, PORT } from './constants';
@@ -35,7 +34,7 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloReslover, authResolver, userResolver],
+      resolvers: [authResolver, userResolver],
       validate: false,
       authChecker,
     }),

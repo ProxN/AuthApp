@@ -29,6 +29,8 @@ const authChecker: AuthChecker<Context> = async ({ context }) => {
 
   if (!user) return false;
 
+  if (user.passwordChangedAfter(decodeToken.iat)) return false;
+
   req.user = user;
 
   return true;

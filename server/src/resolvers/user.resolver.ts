@@ -12,7 +12,7 @@ import User from '../entities/User';
 import { Context } from '../types/context';
 
 @InputType()
-class UpdaeProfile implements Partial<User> {
+class UpdateProfile implements Partial<User> {
   @Field({ nullable: true })
   name?: string;
 
@@ -32,7 +32,7 @@ class UserResolver {
   @Authorized()
   @Mutation(() => User)
   async updateProfile(
-    @Arg('data') newProfile: UpdaeProfile,
+    @Arg('data') newProfile: UpdateProfile,
     @Ctx() { req }: Context
   ): Promise<User | null> {
     await User.update({ id: req.user.id }, newProfile);

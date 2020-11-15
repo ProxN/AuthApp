@@ -9,6 +9,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
 
 @ObjectType()
@@ -38,10 +39,13 @@ class User extends BaseEntity {
   phone?: number;
 
   @Column({ type: 'text', nullable: true })
-  resetToken?: string;
+  resetToken?: string | null;
 
   @Column({ type: 'timestamp', nullable: true })
-  resetTokenExpires?: Date;
+  resetTokenExpires?: Date | null;
+
+  @Column({ type: 'timestamp', nullable: true })
+  passwordChanged?: Date;
 
   @Field()
   @CreateDateColumn()
@@ -52,6 +56,7 @@ class User extends BaseEntity {
   updatedAt?: Date;
 
   @BeforeInsert()
+  @BeforeUpdate()
   async hashPassword() {
     this.password = await bcrypt.hash(this.password, 12);
   }
@@ -73,6 +78,16 @@ class User extends BaseEntity {
 
     return resetToken;
   };
+
+  passwordChangedAfter(JWTtimestamp: number) {
+    if (this.passwordChanged) {
+      const changedTimeStamp = Math.floor(
+        this.passwordChanged.getTime() / 1000
+      );
+      return JWTtimestamp < changedTimeStamp;
+    }
+    return false;
+  }
 }
 
 export default User;

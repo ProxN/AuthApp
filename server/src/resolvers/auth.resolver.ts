@@ -190,8 +190,9 @@ class AuthResolver {
     }
 
     user.password = newPassword;
-    user.resetToken = undefined;
-    user.resetTokenExpires = undefined;
+    user.passwordChanged = new Date();
+    user.resetToken = null;
+    user.resetTokenExpires = null;
     await user.save();
 
     const token = generateToken(user.id);
