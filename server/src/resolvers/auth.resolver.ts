@@ -51,7 +51,7 @@ class AuthArgs {
 }
 
 @Resolver()
-class authReslover {
+class AuthResolver {
   @Mutation(() => AuthResponse)
   async register(
     @Args() { email, password }: AuthArgs,
@@ -201,4 +201,4 @@ class authReslover {
   }
 }
 
-export default authReslover;
+export default AuthResolver;

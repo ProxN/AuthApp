@@ -7,9 +7,12 @@ import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import express from 'express';
 import path from 'path';
-import authReslover from './resolvers/auth.reslover';
+import cookieParser from 'cookie-parser';
+import authResolver from './resolvers/auth.resolver';
+import userResolver from './resolvers/user.resolver';
 import { HelloReslover } from './resolvers/hello';
 import User from './entities/User';
+import authChecker from './utils/authChecker';
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER, PORT } from './constants';
 
 const main = async () => {
@@ -28,10 +31,13 @@ const main = async () => {
 
   const app = express();
 
+  app.use(cookieParser());
+
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloReslover, authReslover],
+      resolvers: [HelloReslover, authResolver, userResolver],
       validate: false,
+      authChecker,
     }),
     context: ({ req, res }) => ({
       req,
