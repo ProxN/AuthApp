@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 import { config } from 'dotenv';
+config({ path: './config.env' });
+
 import { createConnection } from 'typeorm';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
@@ -8,7 +10,6 @@ import path from 'path';
 import authReslover from './resolvers/auth.reslover';
 import { HelloReslover } from './resolvers/hello';
 import User from './entities/User';
-config({ path: './config.env' });
 import { DB_HOST, DB_NAME, DB_PASS, DB_USER, PORT } from './constants';
 
 const main = async () => {

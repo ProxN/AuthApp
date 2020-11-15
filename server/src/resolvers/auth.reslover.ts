@@ -6,10 +6,15 @@ import {
   ArgsType,
   Args,
   Ctx,
+  Arg,
 } from 'type-graphql';
+import crypto from 'crypto';
+import { MoreThan } from 'typeorm';
 import User from '../entities/User';
 import validate from '../utils/validate';
 import { Context } from '../types/context';
+import { generateToken, setTokenCookie } from '../utils/token';
+import sendEmail from '../utils/sendEmail';
 
 @ObjectType()
 class FieldError {
@@ -20,10 +25,19 @@ class FieldError {
 }
 
 @ObjectType()
-class AuthResponse {
+class ErrorResponse {
   @Field(() => FieldError, { nullable: true })
   error?: FieldError;
+}
 
+@ObjectType()
+class forgotPasswordResponse extends ErrorResponse {
+  @Field(() => Boolean, { nullable: true })
+  emailSent?: boolean;
+}
+
+@ObjectType()
+class AuthResponse extends ErrorResponse {
   @Field(() => User, { nullable: true })
   user?: User;
 }
@@ -39,13 +53,17 @@ class AuthArgs {
 @Resolver()
 class authReslover {
   @Mutation(() => AuthResponse)
-  async register(@Args() { email, password }: AuthArgs): Promise<AuthResponse> {
+  async register(
+    @Args() { email, password }: AuthArgs,
+    @Ctx() { res }: Context
+  ): Promise<AuthResponse> {
     const error = validate(email, password);
     if (error) {
       return { error };
     }
 
     let user;
+    let token;
     try {
       const result = await User.create({
         email,
@@ -53,6 +71,7 @@ class authReslover {
       }).save();
 
       user = result;
+      token = generateToken(result.id);
     } catch (err) {
       if (err.code === '23505') {
         return {
@@ -62,6 +81,10 @@ class authReslover {
           },
         };
       }
+    }
+
+    if (token) {
+      setTokenCookie(res, token);
     }
 
     return { user: user };
@@ -78,7 +101,7 @@ class authReslover {
       return { error };
     }
 
-    const user = await User.findOne({ where: { email: email } });
+    const user = await User.findOne({ where: { email } });
 
     if (!user || !(await user.correctPassword(password, user.password))) {
       return {
@@ -89,7 +112,92 @@ class authReslover {
       };
     }
 
-    return { user: user };
+    const token = generateToken(user.id);
+
+    setTokenCookie(res, token);
+    return { user };
+  }
+
+  @Mutation(() => forgotPasswordResponse)
+  async forgotPassword(
+    @Arg('email') email: string
+  ): Promise<forgotPasswordResponse> {
+    if (!email) {
+      return {
+        error: {
+          field: 'email',
+          message: 'Please provide an email!',
+        },
+      };
+    }
+
+    const user = await User.findOne({ where: { email } });
+
+    if (!user) {
+      return {
+        error: {
+          field: 'user',
+          message: 'There is no user with this email address',
+        },
+      };
+    }
+
+    const resetToken = user.createResetToken();
+    await user.save();
+
+    const resetURL = `http://localhost:3000/resetPassword/${resetToken}`;
+
+    await sendEmail({
+      subject: 'Reset your password!!',
+      to: user.email,
+      message: `Reset your password using this link:${resetURL}`,
+    });
+
+    return { emailSent: true };
+  }
+
+  @Mutation(() => AuthResponse)
+  async resetToken(
+    @Arg('newPassword') newPassword: string,
+    @Arg('resetToken') resetToken: string,
+    @Ctx() { res }: Context
+  ): Promise<AuthResponse> {
+    if (!newPassword) {
+      return {
+        error: {
+          field: 'newPassword',
+          message: 'Please provide a new password!',
+        },
+      };
+    }
+
+    const hashToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+
+    const user = await User.findOne({
+      where: { resetToken: hashToken, resetTokenExpires: MoreThan(new Date()) },
+    });
+
+    if (!user) {
+      return {
+        error: {
+          field: 'reset_token',
+          message: 'Token is invalid or has expired',
+        },
+      };
+    }
+
+    user.password = newPassword;
+    user.resetToken = undefined;
+    user.resetTokenExpires = undefined;
+    await user.save();
+
+    const token = generateToken(user.id);
+    setTokenCookie(res, token);
+
+    return { user };
   }
 }
 

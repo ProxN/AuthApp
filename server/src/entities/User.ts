@@ -1,5 +1,6 @@
 import { ObjectType, Field } from 'type-graphql';
 import bcrypt from 'bcrypt';
+import crypto from 'crypto';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -36,6 +37,12 @@ class User extends BaseEntity {
   @Column({ type: 'char', length: 15, nullable: true })
   phone?: number;
 
+  @Column({ type: 'text', nullable: true })
+  resetToken?: string;
+
+  @Column({ type: 'timestamp', nullable: true })
+  resetTokenExpires?: Date;
+
   @Field()
   @CreateDateColumn()
   createdAt?: Date;
@@ -52,6 +59,20 @@ class User extends BaseEntity {
   async correctPassword(password: string, hashPassword: string) {
     return await bcrypt.compare(password, hashPassword);
   }
+
+  createResetToken = () => {
+    const resetToken = crypto.randomBytes(32).toString('hex');
+
+    const hashToken = crypto
+      .createHash('sha256')
+      .update(resetToken)
+      .digest('hex');
+
+    this.resetToken = hashToken;
+    this.resetTokenExpires = new Date(Date.now() + 10 * 60 * 1000);
+
+    return resetToken;
+  };
 }
 
 export default User;
