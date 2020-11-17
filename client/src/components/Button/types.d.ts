@@ -10,4 +10,5 @@ export interface StylesProps {
 
 export interface ButtonProps extends StylesProps {
   onClick?: () => void;
+  disabled?: boolean;
 }

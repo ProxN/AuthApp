@@ -2,16 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter as Routes } from 'react-router-dom';
-import { Theme } from './styles';
 import App from './App';
+import { Theme } from './styles';
 import reportWebVitals from './reportWebVitals';
+import AuthContext from './context/auth.context';
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={Theme}>
-      <Routes>
-        <App />
-      </Routes>
+      <AuthContext>
+        <Routes>
+          <App />
+        </Routes>
+      </AuthContext>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')

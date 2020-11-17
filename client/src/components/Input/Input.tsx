@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputProps } from './types';
+import { InputProps, CompoundedComponent } from './types';
 import {
   InputBox,
   SvgIcon,
@@ -18,17 +18,28 @@ const InputWrapper: React.FC<{ label?: string }> = ({ children, label }) => {
   );
 };
 
-const Input = (props: InputProps): React.ReactElement => {
-  const { onChange, icon, label, ...rest } = props;
-  return (
-    <InputWrapper label={label}>
-      <InputBox>
-        {icon && <SvgIcon>{icon}</SvgIcon>}
-        <StyledInput withIcon={!!icon} {...rest} />
-      </InputBox>
-    </InputWrapper>
-  );
-};
+export type Ref = HTMLInputElement;
+
+const Input = React.forwardRef<Ref, InputProps>(
+  (props, ref): React.ReactElement => {
+    const { onChange, icon, label, value, ...rest } = props;
+
+    return (
+      <InputWrapper label={label}>
+        <InputBox>
+          {icon && <SvgIcon>{icon}</SvgIcon>}
+          <StyledInput
+            ref={ref}
+            onChange={onChange}
+            value={value || ''}
+            withIcon={!!icon}
+            {...rest}
+          />
+        </InputBox>
+      </InputWrapper>
+    );
+  }
+) as CompoundedComponent;
 
 const TextArea: React.FC<InputProps> = (props) => {
   const { onChange, label, ...rest } = props;
@@ -54,6 +65,8 @@ Input.defaultProps = {
   borderRadius: '8px',
   type: 'text',
   fullWidth: false,
+  value: '',
+  disabled: false,
 };
 
 export default Input;

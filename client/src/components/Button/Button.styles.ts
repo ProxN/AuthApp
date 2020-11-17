@@ -18,6 +18,9 @@ const PrimaryStyles = css`
     :hover {
       background: ${theme.colors.primary.light};
     }
+    :disabled {
+      background: ${theme.colors.primary.light};
+    }
   `};
 `;
 

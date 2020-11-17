@@ -12,6 +12,7 @@ Button.defaultProps = {
   type: 'button',
   borderRadius: '8px',
   status: 'default',
+  disabled: false,
 };
 
 export default Button;

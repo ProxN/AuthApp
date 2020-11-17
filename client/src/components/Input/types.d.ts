@@ -21,4 +21,12 @@ export interface InputStylesProps extends BaseProps {
 export interface InputProps extends BaseProps {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label?: string;
+  value?: string;
+}
+
+export interface CompoundedComponent
+  extends React.ForwardRefExoticComponent<
+    Props & React.RefAttributes<HTMLInputElement>
+  > {
+  TextArea: React.FC<InputProps>;
 }

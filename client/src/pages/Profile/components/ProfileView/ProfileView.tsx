@@ -3,6 +3,7 @@ import Text from '../../../../components/Text';
 import Button from '../../../../components/Button';
 import Flex from '../../../../components/Flex';
 import Avatar from '../../../../components/Avatar';
+import { IUser } from '../../../../types';
 import {
   ProfileContent,
   ProfileInfo,
@@ -12,7 +13,14 @@ import {
   Container,
 } from './ProfileView.styles';
 
-const ProfileView: React.FC = () => {
+interface ProfileViewProps {
+  user: IUser;
+  handleEditClick: () => void;
+}
+
+const nothing = '--------------';
+
+const ProfileView: React.FC<ProfileViewProps> = ({ user, handleEditClick }) => {
   return (
     <Container direction='column' align='center'>
       <Title>Personal info</Title>
@@ -25,7 +33,9 @@ const ProfileView: React.FC = () => {
               Some info may be visible to other people
             </Text>
           </Flex>
-          <Button Size='small'>Edit</Button>
+          <Button onClick={handleEditClick} Size='small'>
+            Edit
+          </Button>
         </ProfileHeader>
         <ProfileInfo align='center'>
           <ProfileLabel appearance='hint'>PHOTO</ProfileLabel>
@@ -37,21 +47,19 @@ const ProfileView: React.FC = () => {
         </ProfileInfo>
         <ProfileInfo align='center'>
           <ProfileLabel appearance='hint'>NAME</ProfileLabel>
-          <Text>Xanthe Neal</Text>
+          <Text>{user.name || nothing}</Text>
         </ProfileInfo>
         <ProfileInfo align='center'>
           <ProfileLabel appearance='hint'>BIO</ProfileLabel>
-          <Text>
-            I am a software developer and a big fan of devchallenges...
-          </Text>
+          <Text>{user.bio || nothing}</Text>
         </ProfileInfo>
         <ProfileInfo align='center'>
           <ProfileLabel appearance='hint'>PHONE</ProfileLabel>
-          <Text>908249274292</Text>
+          <Text>{user.phone || nothing}</Text>
         </ProfileInfo>
         <ProfileInfo align='center'>
           <ProfileLabel appearance='hint'>EMAIL</ProfileLabel>
-          <Text>xanthe.neal@gmail.com</Text>
+          <Text>{user.email || nothing}</Text>
         </ProfileInfo>
         <ProfileInfo align='center'>
           <ProfileLabel appearance='hint'>PASSWORD</ProfileLabel>

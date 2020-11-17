@@ -18,7 +18,7 @@ const Header: React.FC = () => {
   return (
     <HeaderContainer>
       <HeaderContent>
-        <LogoLink to='/app'>
+        <LogoLink to='/profile'>
           <Logo />
         </LogoLink>
         <UserDropDown>

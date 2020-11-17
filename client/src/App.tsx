@@ -1,20 +1,42 @@
-import React from 'react';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import React, { useEffect, useContext } from 'react';
+import { QueryCache, ReactQueryCacheProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query-devtools';
 import Layout from './components/Layout';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
+import Routes from './Routes';
+import useMe from './hooks/useMe';
+import { Context } from './context/auth.context';
+
+const querycache = new QueryCache({
+  defaultConfig: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 0,
+    },
+  },
+});
 
 const App: React.FC = () => {
+  const { data, isLoading } = useMe();
+  const { dispatch } = useContext(Context);
+
+  useEffect(() => {
+    if (data && data.me) {
+      dispatch({
+        type: 'SET_USER',
+        payload: data.me,
+      });
+    }
+  }, [isLoading]);
+
   return (
-    <Layout>
-      <Switch>
-        <Route path='/' exact component={Login} />
-        <Route path='/register' exact component={Register} />
-        <Route path='/profile' exact component={Profile} />
-        <Redirect to='/' />
-      </Switch>
-    </Layout>
+    <React.Suspense fallback={() => null}>
+      <ReactQueryCacheProvider queryCache={querycache}>
+        <Layout>
+          <Routes />
+          <ReactQueryDevtools />
+        </Layout>
+      </ReactQueryCacheProvider>
+    </React.Suspense>
   );
 };
 
